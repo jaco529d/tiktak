@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Break Your Day{% endblock %}
+
+{% block content %}
+
+{% for post in posts %}
+    <h2>{{ post['title'] }}</h2>
+
+    {% if post['type'] == 'video' %}
+        <video controls>
+            <source src="{{ url_for('media_file', filename=post['media']) }}">
+        </video>
+    {% else %}
+        <img src="{{ url_for('media_file', filename=post['media']) }}">
+    {% endif %}
+
+{% else %}
+    <em>Unbelievable, no posts yet!</em>
+{% endfor %}
+
+{% endblock %}
