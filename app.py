@@ -1,6 +1,7 @@
 import hashlib
 import sqlite3
 import os
+import uuid
 
 from flask import (
     Flask, g, render_template, redirect, url_for, request, flash,
@@ -115,14 +116,19 @@ def upload():
         else:
             # Everthing is fine, make the post 
 
-            # Save the uploaded to disk 
-            # TODO Generate unique filenames
-            filename = secure_filename(file.filename)
+            # Save the upload to disk 
+            ## TODO Generate unique filenames ##
+            filename = str(uuid.uuid4())
+            #filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['MEDIA_DIR'], filename))
 
             # Save the post in the database
-            # TODO Check for empty title 
+            ## TODO Check for empty title  ## 
             title = request.form['title']
+            if title == '':
+                flash("Invalid Title")
+                return redirect(url_for('upload'))
+
             db = get_db()
             db.execute("INSERT INTO post (title, media, type) VALUES (?,?,?);", 
                        (title, filename, type)
