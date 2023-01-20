@@ -174,12 +174,21 @@ def register():
         # TODO Maybe check if the password is a good one?
         def good_password(password):
             good = True
-            if len(password) < 7:
+            if len(password) < 8:
                 good = False
             num = any(chr.isdigit() for chr in password)
             if not num:
                 good = False
+            let = any(chr.isalnum()for chr in password)
+            if not let:
+                good = False
+            ulet = any(chr.isupper()for chr in password)
+            if not ulet:
+                good = False
             
+            #let = letter
+            #ulet = uppercase letter
+
             return good
         
         if not good_password(password1):
