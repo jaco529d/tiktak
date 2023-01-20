@@ -12,7 +12,7 @@ from werkzeug.utils import secure_filename
                 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "create-your-own"
+app.config['SECRET_KEY'] = b'0xb9a10bc20659c6'
 app.config['MEDIA_DIR'] = os.path.join(app.instance_path, 'media') 
 app.config['MAX_CONTENT_LENGTH'] = 200 * 1000 * 1000
 
