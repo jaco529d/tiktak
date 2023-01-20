@@ -70,7 +70,7 @@ def login():
             return render_template('login.html')
 
         # TODO: Check if the passwords match
-        #print(user['password'])
+        print(user['password'])
         hashed_login_password = hashlib.sha256(request.form['password'].encode()).hexdigest()
         if hashed_login_password != user['password']:
             flash('Invalid password')
@@ -146,8 +146,17 @@ def register():
 
     # If we receive form data try to register the new user
     if request.method == 'POST':
+        db=get_db()
+        username = request.form['username']
+        hashed_password = hashlib.sha256(request.form['password1'].encode()).hexdigest()
 
         # TODO Check if username is available
+        cur = db.execute("SELECT * FROM user WHERE username=?", (username,))
+        other = cur.fetchone()
+
+        if other == None:
+            flash("Username '{}' already taken".format(request.form['username']), 'error')
+            return render_template('register.html')
         #flash("Username '{}' already taken".format(request.form['username']), 'error')
 
         # TODO Check if the two passwords match
@@ -158,8 +167,7 @@ def register():
 
         # If all is well create the user
         # TODO See previous TODOs
-        hashed_password = hashlib.sha256(request.form['password1'].encode()).hexdigest()
-        db=get_db()
+        
         db.execute("INSERT INTO user (username, password) VALUES (?,?)",
                    (request.form['username'], hashed_password))
         db.commit()
