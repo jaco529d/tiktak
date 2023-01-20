@@ -192,9 +192,16 @@ def register():
         db.execute("INSERT INTO user (username, password) VALUES (?,?)",
                    (request.form['username'], hashed_password))
         db.commit()
-        flash("User '{}' registered, you can now log in.".format(request.form['username']), 'info')
-        
-        return redirect(url_for('login'))
+
+        cur = db.execute("SELECT * FROM user WHERE username=?", 
+                         (request.form['username'],))
+        user = cur.fetchone()
+
+        session.clear()
+        session['user_id'] = user['id']
+        flash('You were registered and logged in.')
+
+        return redirect(url_for('index'))
 
 
     # If we receive no data just show the registration form
