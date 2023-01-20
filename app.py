@@ -152,24 +152,33 @@ def register():
         password2 = request.form['password2']
         hashed_password = hashlib.sha256(request.form['password1'].encode()).hexdigest()
 
-        # TODO Check if username is available
+        # Check if username is available
         cur = db.execute("SELECT * FROM user WHERE username=?", (username,))
         other = cur.fetchone()
-
-        print(other)
 
         if other != None:
             flash("Username '{}' already taken".format(username), 'error')
             return render_template('register.html')
 
-        # TODO Check if the two passwords match
+        # Check if the two passwords match
         if password1 != password2:
             flash("Passwords do not match, try again.", 'error')
             return render_template('register.html')
-        # flash("Passwords do not match, try again.", 'error')
 
         # TODO Maybe check if the password is a good one?
-        # flash("Password is too weak, try again.", 'error')
+        def good_password(password):
+            good = True
+            if len(password) < 7:
+                good = False
+            num = any(chr.isdigit() for chr in password)
+            if not num:
+                good = False
+            
+            return good
+        
+        if not good_password(password1):
+            flash("Password is too weak, try again.", 'error')
+            return render_template('register.html')
 
         # If all is well create the user
         # TODO See previous TODOs
