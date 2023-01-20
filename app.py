@@ -70,7 +70,7 @@ def login():
             return render_template('login.html')
 
         # TODO: Check if the passwords match
-        print(user['password'])
+        #print(user['password'])
         hashed_login_password = hashlib.sha256(request.form['password'].encode()).hexdigest()
         if hashed_login_password != user['password']:
             flash('Invalid password')
