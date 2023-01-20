@@ -148,18 +148,24 @@ def register():
     if request.method == 'POST':
         db=get_db()
         username = request.form['username']
+        password1 = request.form['password1']
+        password2 = request.form['password2']
         hashed_password = hashlib.sha256(request.form['password1'].encode()).hexdigest()
 
         # TODO Check if username is available
         cur = db.execute("SELECT * FROM user WHERE username=?", (username,))
         other = cur.fetchone()
 
-        if other == None:
-            flash("Username '{}' already taken".format(request.form['username']), 'error')
+        print(other)
+
+        if other != None:
+            flash("Username '{}' already taken".format(username), 'error')
             return render_template('register.html')
-        #flash("Username '{}' already taken".format(request.form['username']), 'error')
 
         # TODO Check if the two passwords match
+        if password1 != password2:
+            flash("Passwords do not match, try again.", 'error')
+            return render_template('register.html')
         # flash("Passwords do not match, try again.", 'error')
 
         # TODO Maybe check if the password is a good one?
