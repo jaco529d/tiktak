@@ -11,4 +11,5 @@ create table post (
     'title' TEXT,
     'media' TEXT,
     'type' TEXT
+    'description' TEXT
 );

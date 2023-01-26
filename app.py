@@ -47,7 +47,7 @@ def index():
     db = get_db()
     cur = db.execute("SELECT * FROM post;")
     posts = cur.fetchall()
-
+    print(posts[0]["description"])
     return render_template('index.html', posts=posts)
 
 
@@ -132,9 +132,12 @@ def upload():
                 flash("Invalid Title")
                 return redirect(url_for('upload'))
 
+            description = request.form['description']
+            
+
             db = get_db()
-            db.execute("INSERT INTO post (title, media, type) VALUES (?,?,?);", 
-                       (title, filename, type)
+            db.execute("INSERT INTO post (title, media, type, description) VALUES (?,?,?,?);", 
+                       (title, filename, type, description)
                       )
             db.commit()
     

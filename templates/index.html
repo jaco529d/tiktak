@@ -15,6 +15,14 @@
         <img src="{{ url_for('media_file', filename=post['media']) }}">
     {% endif %}
 
+    {% if post['description'] == None %}
+    
+    {% else %}
+        <h3>{{ post['description'] }}</h3>
+        
+    {% endif %}
+
+
 {% else %}
     <em>Unbelievable, no posts yet!</em>
 {% endfor %}
